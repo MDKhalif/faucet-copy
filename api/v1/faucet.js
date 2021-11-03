@@ -1,43 +1,42 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import fs from 'fs';
-import path from 'path';
-
 import * as MinaSDK from '@o1labs/client-sdk';
 import fetch from 'node-fetch';
 import bs58check from 'bs58check';
+import networkSettings from '../../settings.js';
 
 import pkg from '@prisma/client';
 const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
-
-const settings = JSON.parse(
-  fs.readFileSync(path.join(path.resolve(), 'settings.json'))
-);
 
 export default async function handler(req, res) {
   const { address, network } = req.body;
 
   // If we cannot parse the JSON, return 400
   if (!address || !network) {
+    console.log(
+      'ERROR: Parse Request Error with address and network values: ',
+      address,
+      network
+    );
     return res.status(400).json({ status: 'parse-error' });
   }
 
   // If the specified network is invalid, return 400
-  if (!network in settings.validNetworks) {
-    console.log('Network name not specified');
+  if (!network in networkSettings.validNetworks) {
+    console.log('ERROR: Network name not specified with value: ', network);
     return res.status(400).json({ status: 'invalid-network' });
   }
 
-  // If the specified address is not valid or passes the checksum, return 400
+  // If the specified address is not valid or doesn't pass the checksum, return 400
   try {
     const decodedAddress = bs58check.decode(address).toString('hex');
     if (!decodedAddress && !decodedAddress.length === 72) {
       throw 'invalid-address';
     }
   } catch (error) {
-    console.log('error', error);
+    console.log('ERROR: Failed Mina address with value: ', address);
     return res.status(400).json({ status: 'invalid-address' });
   }
 
@@ -48,7 +47,7 @@ export default async function handler(req, res) {
     },
   });
   if (entry) {
-    console.log('Previous entry for user', entry.address);
+    console.log('ERROR: Previous entry for address', entry.address);
     return res.status(400).json({ status: 'rate-limit' });
   }
 
@@ -63,10 +62,12 @@ export default async function handler(req, res) {
   const faucetAccountSummary = await fetch(
     `https://devnet.api.minaexplorer.com/accounts/${faucetKeypair.publicKey}`
   );
-  const faucetAccountSummaryJSON = await faucetAccountSummary.json();
 
   if (faucetAccountSummary.status !== 200) {
-    console.log('Mina Faucet Query', faucetAccountSummaryJSON);
+    console.log(
+      'ERROR: Querying nonce value for faucet: ',
+      faucetAccountSummaryJSON
+    );
     return res.status(400).json({ status: 'mina-explorer' });
   }
 
@@ -75,6 +76,7 @@ export default async function handler(req, res) {
   const fee = 1 * 10 ** 7; // 0.01 mina -- in nanonmina (1 billion = 1.0 mina)
   const to = faucetKeypair.publicKey;
   // Create a signed payment
+  const faucetAccountSummaryJSON = await faucetAccountSummary.json();
   const signedPayment = MinaSDK.signPayment(
     {
       from: faucetKeypair.publicKey,
@@ -85,7 +87,6 @@ export default async function handler(req, res) {
     },
     faucetKeypair
   );
-  console.log('signedPayment', JSON.stringify(signedPayment));
 
   // Broadcast transaction
   const paymentResponse = await fetch(
@@ -96,13 +97,16 @@ export default async function handler(req, res) {
       body: JSON.stringify(signedPayment),
     }
   );
-  console.log('Broadcast payment response', await paymentResponse.json());
 
   // Insert successful payment in DB, return 400 otherwise
   if (paymentResponse.status !== 201) {
-    console.log('Broadcast error', paymentResponse);
+    console.log('ERROR: Broadcast payment response: ', paymentResponse);
     return res.status(400).json({ status: 'broadcast-error' });
   } else {
+    console.log(
+      'SUCCESS: Broadcast payment response: ',
+      await paymentResponse.json()
+    );
     await prisma.entry.create({
       data: {
         address: address,

@@ -12,7 +12,7 @@ const config = {
     vite: {
       server: {
         fs: {
-          allow: [searchForWorkspaceRoot(join(process.cwd(), 'settings.json'))],
+          allow: [searchForWorkspaceRoot(join(process.cwd(), 'settings.js'))],
         },
       },
     },

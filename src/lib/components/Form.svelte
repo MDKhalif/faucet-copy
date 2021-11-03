@@ -3,31 +3,50 @@
   import SuccessToast from '$lib/components/SuccessToast.svelte';
   import ErrorToast from '$lib/components/ErrorToast.svelte';
   import validateAddress from '$lib/utils/validateAddress';
-  import getValidNetworks from '$lib/utils/getValidNetworks';
+  import networkSettings from '../../../settings.js';
 
   let networkMenuOpen = false;
   let address = 'B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69e'; // TODO: Remove this later, used for testing purposes (this is the Faucet public key)
   let status = 'idle';
-  let validNetworks = getValidNetworks();
-  let validNetworkNames = validNetworks.map(
-    (network) => network.networkObj.name
-  );
+  $: message = showMessageFromStatus(status);
+
+  let validNetworkNames = networkSettings.validNetworks.map(({ name }) => name);
   let currentSelectedNetwork = validNetworkNames[0];
+
+  const showMessageFromStatus = (status) => {
+    switch (status) {
+      case 'success':
+        return 'Message broadcast to the network. Testnet funds will arrive at your address when the next block is produced (~3 min).';
+      case 'invalid-address':
+        return 'Invalid Mina address. Please verify that your address is correct.';
+      case 'invalid-network':
+        return 'Invalid Network. Please verify that the network you selected is correct.';
+      case 'parse-error':
+        return 'Could not parse the request. Please try again.';
+      case 'rate-limit':
+        return 'This account was sent funds previously. Please use another Mina account.';
+      case 'broadcast-error':
+        return 'Unknown error broadcasting to the network.';
+      case 'mina-explorer':
+        return 'Unknown error. Please try again.';
+    }
+  };
 
   const onSubmit = async () => {
     if (!validateAddress(address)) {
       status = 'invalid-address';
     } else {
-      let networkEntry = Object.keys(validNetworks).find(
-        (networkName) =>
-          validNetworks[networkName].networkObj.name === currentSelectedNetwork
-      );
+      // Get current selected Network settings object from specified user network
+      const network = networkSettings.validNetworks.filter(
+        (network) => currentSelectedNetwork === network.name
+      )[0].ID;
+
       const faucetResponse = await fetch('/api/v1/faucet', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          network: validNetworks[networkEntry].networkName,
-          address: address,
+          network,
+          address,
         }),
       });
       const faucetResponseJSON = await faucetResponse.json();
@@ -70,40 +89,9 @@
     </form>
     <div class="flex justify-center items-center mt-4">
       {#if status === 'success'}
-        <SuccessToast
-          message={'Message broadcast to network. Testnet funds will arrive at your address soon.'}
-          on:reset={() => (status = 'idle')}
-        />
-      {:else if status === 'invalid-address'}
-        <ErrorToast
-          message={'Invalid Mina Address, please verify your address is correct.'}
-          on:reset={() => (status = 'idle')}
-        />
-      {:else if status === 'invalid-network'}
-        <ErrorToast
-          message={'Invalid Network, please verify the network you selected is correct.'}
-          on:reset={() => (status = 'idle')}
-        />
-      {:else if status === 'parse-error'}
-        <ErrorToast
-          message={'Could not parse request, please try again.'}
-          on:reset={() => (status = 'idle')}
-        />
-      {:else if status === 'rate-limit'}
-        <ErrorToast
-          message={'This account was sent funds previously, please use another Mina account.'}
-          on:reset={() => (status = 'idle')}
-        />
-      {:else if status === 'broadcast-error'}
-        <ErrorToast
-          message={'Unknown error broadcasting to network.'}
-          on:reset={() => (status = 'idle')}
-        />
-      {:else if status === 'mina-explorer'}
-        <ErrorToast
-          message={'Unknown error, please try again.'}
-          on:reset={() => (status = 'idle')}
-        />
+        <SuccessToast {message} on:reset={() => (status = 'idle')} />
+      {:else if status !== 'idle'}
+        <ErrorToast {message} on:reset={() => (status = 'idle')} />
       {/if}
     </div>
   </div>
