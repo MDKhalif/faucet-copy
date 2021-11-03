@@ -99,7 +99,8 @@ export default async function handler(req, res) {
   console.log('Broadcast payment response', await paymentResponse.json());
 
   // Insert successful payment in DB, return 400 otherwise
-  if (!paymentResponse.status === '201') {
+  if (paymentResponse.status !== 201) {
+    console.log('Broadcast error', paymentResponse);
     return res.status(400).json({ status: 'broadcast-error' });
   } else {
     await prisma.entry.create({
