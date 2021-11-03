@@ -1,9 +1,9 @@
 <script>
-	import '../app.css';
+  import '../app.css';
 </script>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
-	<div class="max-w-3xl mx-auto">
-		<slot />
-	</div>
+  <div class="max-w-3xl mx-auto">
+    <slot />
+  </div>
 </div>
