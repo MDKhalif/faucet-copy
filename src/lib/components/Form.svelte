@@ -17,7 +17,8 @@
 			status = 'invalid-address';
 		} else {
 			let networkEntry = Object.keys(validNetworks).find(
-				(networkName) => validNetworks[networkName].networkObj.name === currentSelectedNetwork
+				(networkName) =>
+					validNetworks[networkName].networkObj.name === currentSelectedNetwork
 			);
 			const faucetResponse = await fetch('/api/v1/faucet', {
 				method: 'POST',

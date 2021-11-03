@@ -86,11 +86,14 @@ export default async function handler(req, res) {
 	console.log('signedPayment', JSON.stringify(signedPayment));
 
 	// Broadcast transaction
-	const paymentResponse = await fetch('https://devnet.api.minaexplorer.com/broadcast/transaction', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(signedPayment)
-	});
+	const paymentResponse = await fetch(
+		'https://devnet.api.minaexplorer.com/broadcast/transaction',
+		{
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(signedPayment)
+		}
+	);
 	console.log('Broadcast payment response', await paymentResponse.json());
 
 	// Insert successful payment in DB, return 400 otherwise

@@ -9,8 +9,8 @@
 		Mina Faucet
 	</h2>
 	<p class="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
-		Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus magnam voluptatum cupiditate
-		veritatis in, accusamus quisquam.
+		Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus magnam voluptatum
+		cupiditate veritatis in, accusamus quisquam.
 	</p>
 	<Form />
 </div>
