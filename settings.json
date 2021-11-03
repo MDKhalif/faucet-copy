@@ -1,0 +1,12 @@
+{
+	"validNetworks": {
+		"devnet": {
+			"name": "Devnet Testnet",
+			"endpoint": "https://devnet.api.minaexplorer.com"
+		},
+		"snappsnet": {
+			"name": "Snapps Testnet",
+			"endpoint": "https://devnet.api.minaexplorer.com"
+		}
+	}
+}
