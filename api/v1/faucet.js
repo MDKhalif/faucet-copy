@@ -28,7 +28,10 @@ export default async function handler(req, res) {
     (networkSetting) => networkSetting.ID === network
   );
   if (!testnetNetwork) {
-    console.log('ERROR: Network name not specified with value: ', network);
+    console.log(
+      'ERROR: Network name not specified with value: ',
+      testnetNetwork
+    );
     return res.status(400).json({ status: 'invalid-network' });
   }
 
