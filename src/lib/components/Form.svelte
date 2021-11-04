@@ -41,7 +41,6 @@
         status = 'invalid-address';
         return;
       }
-
       // Get current selected Network settings object from specified user network
       const network = networkSettings.validNetworks.filter(
         (network) => currentSelectedNetwork === network.name
@@ -71,13 +70,15 @@
       class="mt-5 sm:flex sm:items-center flex-col"
     >
       <div class="w-full sm:max-w-lg">
-        <label for="address" class="sr-only">Email</label>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="address">
+          Mina Address</label
+        >
         <input
           type="text"
           id="address"
           name="address"
           class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-          placeholder="Your Mina Address here"
+          placeholder="B62..."
           bind:value={address}
         />
       </div>
