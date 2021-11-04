@@ -2,10 +2,42 @@
   export let menuOpen;
   export let items;
   export let currentItem;
+
+  /**
+   * This action is fired when the Dropdown component is mounted. The action initially sets up a
+   * click event listener on the window object with the initial state. If a click event is fired
+   * and the target is not the Dropdown component, the action calls a user specified callback function.
+   *
+   * In this case, the callback function sets the `menuOpen` state to false. If the component is unmounted,
+   * the action does the necessary clean up and removes the click event listener.
+   */
+  function clickOutside(node, { enabled: initialEnabled, cb }) {
+    const handleOutsideClick = ({ target }) => {
+      if (!node.contains(target)) {
+        cb();
+      }
+    };
+
+    function update({ enabled }) {
+      if (enabled) {
+        window.addEventListener('click', handleOutsideClick);
+      } else {
+        window.removeEventListener('click', handleOutsideClick);
+      }
+    }
+    update({ enabled: initialEnabled });
+    return {
+      update,
+      destroy() {
+        window.removeEventListener('click', handleOutsideClick);
+      },
+    };
+  }
 </script>
 
 <div
   class="relative inline-block text-left"
+  use:clickOutside={{ enabled: menuOpen, cb: () => (menuOpen = false) }}
   on:click={() => (menuOpen = !menuOpen)}
 >
   <div>
@@ -34,7 +66,7 @@
   </div>
 
   <div
-    class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+    class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none cursor-pointer"
     role="menu"
     aria-orientation="vertical"
     aria-labelledby="menu-button"

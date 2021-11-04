@@ -69,12 +69,17 @@
       on:submit|preventDefault
       class="sm:flex sm:items-center flex-col"
     >
-      <div class="flex justify-center items-align">
-        <Dropdown
-          bind:menuOpen={networkMenuOpen}
-          bind:currentItem={currentSelectedNetwork}
-          bind:items={validNetworkNames}
-        />
+      <div class="flex justify-center items-center">
+        <div class="flex flex-col justify-center items-center">
+          <span class="block text-gray-700 text-sm font-bold mb-2">
+            Testnet Network</span
+          >
+          <Dropdown
+            bind:menuOpen={networkMenuOpen}
+            bind:currentItem={currentSelectedNetwork}
+            bind:items={validNetworkNames}
+          />
+        </div>
       </div>
 
       <div class="w-full sm:max-w-lg mt-20">
@@ -92,7 +97,7 @@
       </div>
       <button
         type="submit"
-        class="w-full mt-4 inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-orange-mina-primary hover:bg-orange-mina-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black-mina-primary sm:ml-3 sm:w-auto sm:text-sm"
+        class="w-full mt-12 inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-orange-mina-primary hover:bg-orange-mina-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black-mina-primary sm:ml-3 sm:w-auto sm:text-sm"
       >
         Request Funds
       </button>
