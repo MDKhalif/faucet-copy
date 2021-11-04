@@ -61,15 +61,23 @@
 </script>
 
 <div
-  class="bg-white shadow sm:rounded-lg flex justify-center items-center mt-24"
+  class="bg-white shadow sm:rounded-lg flex justify-center items-center mt-10"
 >
   <div class="px-4 py-5 sm:p-6 w-full">
     <form
       use:form
       on:submit|preventDefault
-      class="mt-5 sm:flex sm:items-center flex-col"
+      class="sm:flex sm:items-center flex-col"
     >
-      <div class="w-full sm:max-w-lg">
+      <div class="flex justify-center items-align">
+        <Dropdown
+          bind:menuOpen={networkMenuOpen}
+          bind:currentItem={currentSelectedNetwork}
+          bind:items={validNetworkNames}
+        />
+      </div>
+
+      <div class="w-full sm:max-w-lg mt-20">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="address">
           Mina Address</label
         >
@@ -77,24 +85,17 @@
           type="text"
           id="address"
           name="address"
-          class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+          class="shadow-sm focus:ring-black-mina-primary focus:border-black-mina-primary block w-full sm:text-sm border-gray-300 rounded-md"
           placeholder="B62..."
           bind:value={address}
         />
       </div>
-      <div class="mt-8 flex">
-        <Dropdown
-          bind:menuOpen={networkMenuOpen}
-          bind:currentItem={currentSelectedNetwork}
-          bind:items={validNetworkNames}
-        />
-        <button
-          type="submit"
-          class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
-        >
-          Request Funds
-        </button>
-      </div>
+      <button
+        type="submit"
+        class="w-full mt-4 inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-orange-mina-primary hover:bg-orange-mina-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black-mina-primary sm:ml-3 sm:w-auto sm:text-sm"
+      >
+        Request Funds
+      </button>
     </form>
     <div class="flex justify-center items-center mt-4">
       {#if status === 'success'}
