@@ -24,7 +24,10 @@ export default async function handler(req, res) {
   }
 
   // If the specified network is invalid, return 400
-  if (!network in networkSettings.validNetworks) {
+  const testnetNetwork = networkSettings.validNetworks.find(
+    (networkSetting) => networkSetting.ID === network
+  );
+  if (!testnetNetwork) {
     console.log('ERROR: Network name not specified with value: ', network);
     return res.status(400).json({ status: 'invalid-network' });
   }
@@ -64,7 +67,7 @@ export default async function handler(req, res) {
   // TODO: Change this endpoint to selected network
   // Get the nonce of the Faucet account
   const faucetAccountSummary = await fetch(
-    `https://devnet.api.minaexplorer.com/accounts/${faucetKeypair.publicKey}`
+    `${testnetNetwork.endpoint}/accounts/${faucetKeypair.publicKey}`
   );
 
   if (faucetAccountSummary.status !== 200) {
@@ -94,7 +97,7 @@ export default async function handler(req, res) {
 
   // Broadcast transaction
   const paymentResponse = await fetch(
-    'https://devnet.api.minaexplorer.com/broadcast/transaction',
+    `${testnetNetwork.endpoint}/broadcast/transaction`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
