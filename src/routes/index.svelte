@@ -1,13 +1,17 @@
 <script>
   import Form from '$lib/components/Form.svelte';
+  import MinaLogo from '/static/mina-logo.png';
 </script>
 
 <div class="relative">
-  <h2
-    class="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
-  >
-    Mina Testnet Faucet
-  </h2>
+  <div class="flex flex-col items-center justify-center">
+    <img src={MinaLogo} alt="Mina Logo" />
+    <h2
+      class="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
+    >
+      Mina Testnet Faucet
+    </h2>
+  </div>
   <p class="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
     The Mina Testnet Faucet is a web-based service that provides users with test
     Mina to users who are participating in a testnet. These tokens have no "real
