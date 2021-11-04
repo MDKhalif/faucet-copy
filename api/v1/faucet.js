@@ -3,7 +3,6 @@ dotenv.config();
 
 import * as MinaSDK from '@o1labs/client-sdk';
 import fetch from 'node-fetch';
-import bs58check from 'bs58check';
 import networkSettings from '../../settings.js';
 
 import pkg from '@prisma/client';
@@ -29,12 +28,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ status: 'invalid-network' });
   }
 
-  // If the specified address is not valid or doesn't pass the checksum, return 400
+  // If the specified address is not valid, return 400
   try {
-    const decodedAddress = bs58check.decode(address).toString('hex');
-    if (!decodedAddress && !decodedAddress.length === 72) {
-      throw 'invalid-address';
-    }
+    MinaSDK.publicKeyToRaw(address);
   } catch (error) {
     console.log('ERROR: Failed Mina address with value: ', address);
     return res.status(400).json({ status: 'invalid-address' });
