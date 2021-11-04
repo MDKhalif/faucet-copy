@@ -1,8 +1,11 @@
 <script>
+  import { createForm } from 'felte';
+
   import Dropdown from '$lib/components/Dropdown.svelte';
   import SuccessToast from '$lib/components/SuccessToast.svelte';
   import ErrorToast from '$lib/components/ErrorToast.svelte';
   import validateAddress from '$lib/utils/validateAddress';
+
   import networkSettings from '../../../settings.js';
 
   let networkMenuOpen = false;
@@ -32,10 +35,13 @@
     }
   };
 
-  const onSubmit = async () => {
-    if (!validateAddress(address)) {
-      status = 'invalid-address';
-    } else {
+  const { form } = createForm({
+    onSubmit: async () => {
+      if (!validateAddress(address)) {
+        status = 'invalid-address';
+        return;
+      }
+
       // Get current selected Network settings object from specified user network
       const network = networkSettings.validNetworks.filter(
         (network) => currentSelectedNetwork === network.name
@@ -51,8 +57,8 @@
       });
       const faucetResponseJSON = await faucetResponse.json();
       status = faucetResponseJSON.status;
-    }
-  };
+    },
+  });
 </script>
 
 <div
@@ -60,7 +66,8 @@
 >
   <div class="px-4 py-5 sm:p-6 w-full">
     <form
-      on:submit|preventDefault={onSubmit}
+      use:form
+      on:submit|preventDefault
       class="mt-5 sm:flex sm:items-center flex-col"
     >
       <div class="w-full sm:max-w-lg">
@@ -68,6 +75,7 @@
         <input
           type="text"
           id="address"
+          name="address"
           class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
           placeholder="Your Mina Address here"
           bind:value={address}
