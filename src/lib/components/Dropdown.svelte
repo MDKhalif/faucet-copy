@@ -43,7 +43,7 @@
   <div>
     <button
       type="button"
-      class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-black-mina-primary"
+      class="inline-flex justify-around w-full sm:w-52 rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-black-mina-primary"
       id="menu-button"
       aria-expanded="true"
       aria-haspopup="true"
@@ -66,7 +66,7 @@
   </div>
 
   <div
-    class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none cursor-pointer"
+    class="origin-top-right absolute right-0 mt-2 w-40 sm:w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none cursor-pointer"
     role="menu"
     aria-orientation="vertical"
     aria-labelledby="menu-button"
