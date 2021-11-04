@@ -1,6 +1,6 @@
 <script>
   import Form from '$lib/components/Form.svelte';
-  import MinaLogo from '/mina-logo.png';
+  import MinaLogo from '/static/images/mina-logo.png';
 </script>
 
 <div class="relative">
