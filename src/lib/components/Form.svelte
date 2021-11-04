@@ -4,6 +4,7 @@
   import Dropdown from '$lib/components/Dropdown.svelte';
   import SuccessToast from '$lib/components/SuccessToast.svelte';
   import ErrorToast from '$lib/components/ErrorToast.svelte';
+  import Spinner from '$lib/components/Spinner.svelte';
   import validateAddress from '$lib/utils/validateAddress';
 
   import networkSettings from '../../../settings.js';
@@ -41,6 +42,7 @@
         status = 'invalid-address';
         return;
       }
+      status = 'loading';
       // Get current selected Network settings object from specified user network
       const network = networkSettings.validNetworks.filter(
         (network) => currentSelectedNetwork === network.name
@@ -105,7 +107,9 @@
     <div class="flex justify-center items-center mt-4">
       {#if status === 'success'}
         <SuccessToast {message} on:reset={() => (status = 'idle')} />
-      {:else if status !== 'idle'}
+      {:else if status === 'loading'}
+        <Spinner />
+      {:else if status !== 'idle' && status !== 'loading'}
         <ErrorToast {message} on:reset={() => (status = 'idle')} />
       {/if}
     </div>
