@@ -1,11 +1,12 @@
 import dotenv from 'dotenv';
 dotenv.config();
+import networkSettings from '../../settings.js';
 
 import * as MinaSDK from '@o1labs/client-sdk';
 import fetch from 'node-fetch';
-import networkSettings from '../../settings.js';
-
+import bs58check from 'bs58check';
 import pkg from '@prisma/client';
+
 const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
 
@@ -30,9 +31,16 @@ export default async function handler(req, res) {
 
   // If the specified address is not valid, return 400
   try {
-    MinaSDK.publicKeyToRaw(address);
+    const decodedAddress = bs58check.decode(address).toString('hex');
+    if (!decodedAddress && !decodedAddress.length === 72) {
+      throw 'invalid-address';
+    }
   } catch (error) {
-    console.log('ERROR: Failed Mina address with value: ', address);
+    console.log(
+      'ERROR: Failed Mina address with address and error: ',
+      address,
+      error
+    );
     return res.status(400).json({ status: 'invalid-address' });
   }
 
