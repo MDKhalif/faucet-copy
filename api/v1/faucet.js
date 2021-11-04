@@ -64,7 +64,6 @@ export default async function handler(req, res) {
     publicKey: process.env.FAUCET_PUBLICKEY,
   };
 
-  // TODO: Change this endpoint to selected network
   // Get the nonce of the Faucet account
   const faucetAccountSummary = await fetch(
     `${testnetNetwork.endpoint}/accounts/${faucetKeypair.publicKey}`
