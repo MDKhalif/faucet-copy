@@ -62,9 +62,7 @@
   });
 </script>
 
-<div
-  class="bg-white shadow sm:rounded-lg flex justify-center items-center mt-10"
->
+<div class="bg-white flex justify-center items-center mt-10">
   <div class="px-4 py-5 sm:p-6 w-full">
     <form
       use:form
@@ -72,9 +70,9 @@
       class="sm:flex sm:items-center flex-col"
     >
       <div class="flex justify-center items-center">
-        <div class="flex flex-col justify-center items-center">
+        <div class="flex flex-col w-full">
           <span class="block text-gray-700 text-sm font-bold mb-2">
-            Testnet Network</span
+            Network</span
           >
           <Dropdown
             bind:menuOpen={networkMenuOpen}
@@ -83,8 +81,7 @@
           />
         </div>
       </div>
-
-      <div class="w-full sm:max-w-lg mt-20">
+      <div class="w-full sm:max-w-lg mt-12 ">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="address">
           Mina Address</label
         >

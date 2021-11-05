@@ -13,32 +13,11 @@
     </h2>
   </div>
   <p class="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
-    The Mina Testnet Faucet is a web-based service that provides users with test
-    Mina to users who are participating in a testnet. These tokens have no "real
-    world" value and they simply enable users to build and experiment on-top of
-    the Mina Testnet.
+    Enter a Mina address to receive Testnet funds. Testnet tokens have no value,
+    but are useful for experimenting on Mina Testnets.
   </p>
-  <div
-    class="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto text-center"
-  >
-    <p class="text-xl">
-      <strong>To request tokens using the Mina Testnet Faucet:</strong>
-    </p>
-    <ul class="mt-4 space-y-1" role="list">
-      <li>Select the network you wish to participate in.</li>
-      <li>Enter the address you want to fund.</li>
-      <li>Click <strong>Request Funds.</strong></li>
-      <li>Funds will arrive to your Mina account within the next block.</li>
-    </ul>
-  </div>
   <Form />
-  <p
-    class="prose prose-indigo prose-lg text-gray-500 mx-auto text-center mt-12"
-  >
-    <i
-      >Users who request funds with the Mina Testnet Faucet have a limit to <strong
-        >one faucet request per account
-      </strong>to ensure everyone has access to funds.</i
-    >
+  <p class="prose prose-indigo prose-lg text-gray-500 mx-auto text-center">
+    <i>Limit of 1 use per address on each network.</i>
   </p>
 </div>
