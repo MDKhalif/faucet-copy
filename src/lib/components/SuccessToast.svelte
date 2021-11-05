@@ -1,13 +1,6 @@
 <script>
   import { fade } from 'svelte/transition';
-  import { createEventDispatcher } from 'svelte';
-  const dispatch = createEventDispatcher();
-
   export let message;
-
-  setTimeout(() => {
-    dispatch('reset');
-  }, 4000);
 </script>
 
 <div

@@ -106,7 +106,7 @@
     </form>
     <div class="flex justify-center items-center mt-4">
       {#if status === 'success'}
-        <SuccessToast {message} on:reset={() => (status = 'idle')} />
+        <SuccessToast {message} />
       {:else if status === 'loading'}
         <Spinner />
       {:else if status !== 'idle' && status !== 'loading'}
