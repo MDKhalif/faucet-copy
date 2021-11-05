@@ -12,12 +12,15 @@
       Mina Testnet Faucet
     </h2>
   </div>
-  <p class="mt-20 max-w-3xl mx-auto text-center text-xl text-gray-500">
+  <p class="mt-20 max-w-xl mx-auto text-center text-xl text-gray-500">
     Enter a Mina address to receive Testnet funds. Testnet tokens have no value,
     but are useful for experimenting on Mina Testnets.
   </p>
   <Form />
   <p class="prose prose-indigo prose-lg text-gray-500 mx-auto text-center">
-    <i>Limit of 1 use per address on each network.</i>
+    <i
+      >Limit of 1 use per address on each network to ensure everyone has access
+      to funds.</i
+    >
   </p>
 </div>

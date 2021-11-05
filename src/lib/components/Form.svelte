@@ -81,7 +81,7 @@
           />
         </div>
       </div>
-      <div class="w-full sm:max-w-lg mt-12 ">
+      <div class="w-full sm:max-w-lg mt-6 ">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="address">
           Mina Address</label
         >
@@ -89,7 +89,7 @@
           type="text"
           id="address"
           name="address"
-          class="shadow-sm focus:ring-black-mina-primary focus:border-black-mina-primary block w-full sm:text-sm border-gray-300 rounded-md"
+          class="shadow-sm focus:ring-orange-mina-primary focus:ring-opacity-60 focus:border-orange-mina-primary block w-full sm:text-sm border-gray-300 rounded-md"
           placeholder="B62..."
           bind:value={address}
         />
