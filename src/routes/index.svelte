@@ -1,11 +1,11 @@
 <script>
   import Form from '$lib/components/Form.svelte';
-  import MinaLogo from '/static/images/mina-logo.png';
+  import MinaLogo from '/static/images/mina-logo.svg';
 </script>
 
 <div class="relative">
   <div class="flex flex-col items-center justify-center">
-    <img src={MinaLogo} alt="Mina Logo" />
+    <img src={MinaLogo} alt="Mina Logo" class="w-80 h-full" />
     <h2
       class="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl mt-20"
     >
