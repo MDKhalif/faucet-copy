@@ -20,3 +20,8 @@ model Entry {
   @@unique(fields: [address, network], name:"addressNetwork")
 }
 
+model FaucetAccountNonce {
+  id            Int      @default(autoincrement()) @id
+  snappnetNonce Int
+  devnetNonce   Int
+}

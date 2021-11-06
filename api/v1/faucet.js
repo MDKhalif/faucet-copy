@@ -1,10 +1,16 @@
 import dotenv from 'dotenv';
 dotenv.config();
+
+import {
+  getNetworkFromNetworkSettings,
+  checkIfMinaAddressIsValid,
+  getFaucetNonce,
+  constructSignedMinaPayment,
+  getInferredNonceFromErrorResponse,
+} from './utils.js';
 import networkSettings from '../../settings.js';
 
-import * as MinaSDK from '@o1labs/client-sdk';
 import fetch from 'node-fetch';
-import bs58check from 'bs58check';
 import pkg from '@prisma/client';
 
 const { PrismaClient } = pkg;
@@ -15,46 +21,34 @@ export default async function handler(req, res) {
 
   // If we cannot parse the JSON, return 400
   if (!address || !network) {
-    console.log(
-      'ERROR: Parse Request Error with address and network values: ',
-      address,
-      network
-    );
     return res.status(400).json({ status: 'parse-error' });
   }
 
   // If the specified network is invalid, return 400
-  const testnetNetwork = networkSettings.validNetworks.find(
-    (networkSetting) => networkSetting.ID === network
+  const specifiedNetwork = getNetworkFromNetworkSettings(
+    network,
+    networkSettings.validNetworks
   );
-  if (!testnetNetwork) {
-    console.log('ERROR: Network name not specified with value: ', network);
+  if (!specifiedNetwork) {
     return res.status(400).json({ status: 'invalid-network' });
   }
 
   // If the specified address is not valid, return 400
   try {
-    const decodedAddress = bs58check.decode(address).toString('hex');
-    if (!decodedAddress && !decodedAddress.length === 72) {
+    if (checkIfMinaAddressIsValid(address)) {
       throw 'invalid-address';
     }
   } catch (error) {
-    console.log(
-      'ERROR: Failed Mina address with address and error: ',
-      address,
-      error
-    );
     return res.status(400).json({ status: 'invalid-address' });
   }
 
   // Apply rate limiting to previous Mina accounts if found in DB
-  const entry = await prisma.entry.findUnique({
+  const previousEntry = await prisma.entry.findUnique({
     where: {
-      addressNetwork: { address: address, network: network },
+      addressNetwork: { address, network },
     },
   });
-  if (entry) {
-    console.log('ERROR: Previous entry for address', entry.address);
+  if (previousEntry) {
     return res.status(400).json({ status: 'rate-limit' });
   }
 
@@ -64,39 +58,22 @@ export default async function handler(req, res) {
     publicKey: process.env.FAUCET_PUBLICKEY,
   };
 
-  // Get the nonce of the Faucet account
-  const faucetAccountSummary = await fetch(
-    `${testnetNetwork.endpoint}/accounts/${faucetKeypair.publicKey}`
+  // Get the nonce of the Faucet account from DB
+  const faucetNonce = await prisma.faucetAccountNonce.findMany();
+  let currentNetworkNonce = await getFaucetNonce(
+    faucetNonce,
+    specifiedNetwork.ID
   );
 
-  if (faucetAccountSummary.status !== 200) {
-    console.log(
-      'ERROR: Querying nonce value for faucet: ',
-      faucetAccountSummaryJSON
-    );
-    return res.status(400).json({ status: 'mina-explorer' });
-  }
-
-  // TODO: Replace to, amount and fee values for what will be used in production
-  const amount = 10 ** 9; // 1.0 mina -- in nanonmina (1 billion = 1.0 mina)
-  const fee = 1 * 10 ** 7; // 0.01 mina -- in nanonmina (1 billion = 1.0 mina)
-  const to = faucetKeypair.publicKey;
   // Create a signed payment
-  const faucetAccountSummaryJSON = await faucetAccountSummary.json();
-  const signedPayment = MinaSDK.signPayment(
-    {
-      from: faucetKeypair.publicKey,
-      to,
-      amount,
-      fee,
-      nonce: faucetAccountSummaryJSON.account.nonce, // The current nonce of the Faucet account
-    },
-    faucetKeypair
+  const signedPayment = constructSignedMinaPayment(
+    faucetKeypair,
+    currentNetworkNonce
   );
 
   // Broadcast transaction
   const paymentResponse = await fetch(
-    `${testnetNetwork.endpoint}/broadcast/transaction`,
+    `${specifiedNetwork.endpoint}/broadcast/transaction`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -104,24 +81,57 @@ export default async function handler(req, res) {
     }
   );
 
-  // Insert successful payment in DB, return 400 otherwise
-  if (paymentResponse.status !== 201) {
-    console.log('ERROR: Broadcast payment response: ', paymentResponse);
-    return res.status(400).json({ status: 'broadcast-error' });
-  } else {
-    console.log(
-      'SUCCESS: Broadcast payment response: ',
-      await paymentResponse.json()
-    );
-    await prisma.entry.create({
-      data: {
-        address: address,
-        network: network,
-        amount,
-      },
-    });
+  if (paymentResponse.status === 201) {
+    if (specifiedNetwork.ID === 'devnet') {
+      await prisma.faucetAccountNonce.updateMany({
+        data: {
+          devnetNonce: {
+            increment: 1,
+          },
+        },
+      });
+    } else if (specifiedNetwork.ID === 'snappsnet') {
+      await prisma.faucetAccountNonce.updateMany({
+        data: {
+          snappnetNonce: {
+            increment: 1,
+          },
+        },
+      });
+    }
+    // TODO: This is commented out to test, comment back in when deploying
+    // await prisma.entry.create({
+    //   data: {
+    //     address: signedPayment.payload.to,
+    //     network: specifiedNetwork.ID,
+    //     amount: parseInt(signedPayment.payload.amount),
+    //   },
+    // });
     return res.status(200).json({
       status: 'success',
     });
+  } else {
+    const paymentResponseJSON = await paymentResponse.json();
+    const newNonce = getInferredNonceFromErrorResponse(
+      paymentResponseJSON.error
+    );
+
+    // If the tracked nonce value in DB is not the same as network nonce, reset the DB nonce to the network nonce value
+    if (newNonce && currentNetworkNonce !== newNonce) {
+      if (specifiedNetwork.ID === 'devnet') {
+        await prisma.faucetAccountNonce.updateMany({
+          data: {
+            devnetNonce: newNonce,
+          },
+        });
+      } else if (specifiedNetwork.ID === 'snappsnet') {
+        await prisma.faucetAccountNonce.updateMany({
+          data: {
+            snappnetNonce: newNonce,
+          },
+        });
+      }
+    }
+    return res.status(400).json({ status: 'broadcast-error' });
   }
 }
