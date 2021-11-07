@@ -38,12 +38,13 @@
 
   const { form } = createForm({
     onSubmit: async () => {
+      if (status === 'loading') return;
+      status = 'loading';
       if (!validateAddress(address)) {
         status = 'invalid-address';
         return;
       }
-      status = 'loading';
-      // Get current selected Network settings object from specified user network
+      // Get current selected Network ID from the user selected network
       const network = networkSettings.validNetworks.filter(
         (network) => currentSelectedNetwork === network.name
       )[0].ID;
@@ -60,6 +61,9 @@
       status = faucetResponseJSON.status;
     },
   });
+
+  const baseButtonStyles =
+    'w-full mt-12 inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-orange-mina-primary hover:bg-orange-mina-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-mina-primary focus:ring-opacity-60 sm:ml-3 sm:w-auto sm:text-sm';
 </script>
 
 <div class="bg-white flex justify-center items-center mt-10">
@@ -96,7 +100,9 @@
       </div>
       <button
         type="submit"
-        class="w-full mt-12 inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-orange-mina-primary hover:bg-orange-mina-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black-mina-primary sm:ml-3 sm:w-auto sm:text-sm"
+        class={status === 'loading'
+          ? `opacity-25 ${baseButtonStyles}`
+          : baseButtonStyles}
       >
         Request Funds
       </button>
