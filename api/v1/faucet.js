@@ -4,7 +4,6 @@ dotenv.config();
 import {
   getNetworkFromNetworkSettings,
   checkIfMinaAddressIsValid,
-  getFaucetNonce,
   constructSignedMinaPayment,
   getInferredNonceFromErrorResponse,
 } from './utils.js';
@@ -59,17 +58,42 @@ export default async function handler(req, res) {
   };
 
   // Get the nonce of the Faucet account from DB
-  const faucetNonce = await prisma.faucetAccountNonce.findMany();
-  let currentNetworkNonce = await getFaucetNonce(
-    faucetNonce,
-    specifiedNetwork.ID
-  );
+  let faucetNonce;
+  if (specifiedNetwork.ID === 'devnet') {
+    faucetNonce = (
+      await prisma.faucetAccountNonce.update({
+        data: {
+          devnetNonce: {
+            increment: 1,
+          },
+        },
+        where: {
+          id: 1,
+        },
+      })
+    ).devnetNonce;
+  } else if (specifiedNetwork.ID === 'snappsnet') {
+    faucetNonce = (
+      await prisma.faucetAccountNonce.update({
+        data: {
+          snappnetNonce: {
+            increment: 1,
+          },
+        },
+        where: {
+          id: 1,
+        },
+      })
+    ).snappnetNonce;
+  }
+  let currentNetworkNonce = faucetNonce - 1;
 
   // Create a signed payment
   const signedPayment = constructSignedMinaPayment(
     faucetKeypair,
     currentNetworkNonce
   );
+  console.log('signedPayment', signedPayment);
 
   // Broadcast transaction
   const paymentResponse = await fetch(
@@ -81,24 +105,9 @@ export default async function handler(req, res) {
     }
   );
 
+  console.log('broadcast response', await paymentResponse);
+
   if (paymentResponse.status === 201) {
-    if (specifiedNetwork.ID === 'devnet') {
-      await prisma.faucetAccountNonce.updateMany({
-        data: {
-          devnetNonce: {
-            increment: 1,
-          },
-        },
-      });
-    } else if (specifiedNetwork.ID === 'snappsnet') {
-      await prisma.faucetAccountNonce.updateMany({
-        data: {
-          snappnetNonce: {
-            increment: 1,
-          },
-        },
-      });
-    }
     // TODO: This is commented out to test, comment back in when deploying
     // await prisma.entry.create({
     //   data: {

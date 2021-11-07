@@ -10,14 +10,6 @@ export const checkIfMinaAddressIsValid = (address) => {
   return !decodedAddress && !decodedAddress.length === 72;
 };
 
-export const getFaucetNonce = async (faucetNonce, networkSettingID) => {
-  if (networkSettingID === 'devnet') {
-    return faucetNonce[0].devnetNonce;
-  } else if (networkSettingID === 'snappsnet') {
-    return faucetNonce[0].snappnetNonce;
-  }
-};
-
 export const constructSignedMinaPayment = (faucetKeypair, nonce) => {
   // TODO: Replace to, amount and fee values for what will be used in production
   const amount = 10 ** 9; // 1.0 mina -- in nanonmina (1 billion = 1.0 mina)
@@ -36,9 +28,8 @@ export const constructSignedMinaPayment = (faucetKeypair, nonce) => {
 };
 
 export const getInferredNonceFromErrorResponse = (errorResponse) => {
+  console.log(errorResponse);
   const regexNonce = /inferred\snonce\s(\d+)/im;
-  const match = errorResponse.error.match(regexNonce);
-  console.log('match value', match);
-  console.log(`Inferred Nonce: ${match[1]}`);
-  return parseInt(match[1]);
+  const match = errorResponse.match(regexNonce);
+  return match.length > 0 ? parseInt(match[1]) : null;
 };
