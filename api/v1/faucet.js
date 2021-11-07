@@ -34,7 +34,7 @@ export default async function handler(req, res) {
 
   // If the specified address is not valid, return 400
   try {
-    if (checkIfMinaAddressIsValid(address)) {
+    if (!checkIfMinaAddressIsValid(address)) {
       throw 'invalid-address';
     }
   } catch (error) {
@@ -57,42 +57,46 @@ export default async function handler(req, res) {
     publicKey: process.env.FAUCET_PUBLICKEY,
   };
 
-  // Get the nonce of the Faucet account from DB
+  // Update and get the nonce of the Faucet account from DB
+  // We update first to avoid race conditions between parallel executions
   let faucetNonce;
   if (specifiedNetwork.ID === 'devnet') {
     faucetNonce = (
       await prisma.faucetAccountNonce.update({
+        where: {
+          id: 1,
+        },
         data: {
           devnetNonce: {
             increment: 1,
           },
-        },
-        where: {
-          id: 1,
         },
       })
     ).devnetNonce;
   } else if (specifiedNetwork.ID === 'snappsnet') {
     faucetNonce = (
       await prisma.faucetAccountNonce.update({
+        where: {
+          id: 1,
+        },
         data: {
           snappnetNonce: {
             increment: 1,
           },
         },
-        where: {
-          id: 1,
-        },
       })
     ).snappnetNonce;
   }
-  let currentNetworkNonce = faucetNonce - 1;
+  // Since we updated first, the actual nonce value is one less than the returned value
+  const currentNetworkNonce = faucetNonce - 1;
 
-  // Create a signed payment
+  // Create a signed payment with the Faucet keypair and specified network and user address
   const signedPayment = constructSignedMinaPayment(
     faucetKeypair,
-    currentNetworkNonce
+    currentNetworkNonce,
+    address
   );
+
   console.log('signedPayment', signedPayment);
 
   // Broadcast transaction
@@ -105,20 +109,22 @@ export default async function handler(req, res) {
     }
   );
 
-  console.log('broadcast response', await paymentResponse);
-
   if (paymentResponse.status === 201) {
-    // TODO: This is commented out to test, comment back in when deploying
-    // await prisma.entry.create({
-    //   data: {
-    //     address: signedPayment.payload.to,
-    //     network: specifiedNetwork.ID,
-    //     amount: parseInt(signedPayment.payload.amount),
-    //   },
-    // });
-    return res.status(200).json({
-      status: 'success',
-    });
+    // This is in a try-finally incase users specify the same address at the same time that should be rate-limited.
+    // Since the payment is successful, we return a success message even if rate-limit creation fails.
+    try {
+      await prisma.entry.create({
+        data: {
+          address: signedPayment.payload.to,
+          network: specifiedNetwork.ID,
+          amount: parseInt(signedPayment.payload.amount),
+        },
+      });
+    } finally {
+      return res.status(200).json({
+        status: 'success',
+      });
+    }
   } else {
     const paymentResponseJSON = await paymentResponse.json();
     const newNonce = getInferredNonceFromErrorResponse(
@@ -128,13 +134,19 @@ export default async function handler(req, res) {
     // If the tracked nonce value in DB is not the same as network nonce, reset the DB nonce to the network nonce value
     if (newNonce && currentNetworkNonce !== newNonce) {
       if (specifiedNetwork.ID === 'devnet') {
-        await prisma.faucetAccountNonce.updateMany({
+        await prisma.faucetAccountNonce.update({
+          where: {
+            id: 1,
+          },
           data: {
             devnetNonce: newNonce,
           },
         });
       } else if (specifiedNetwork.ID === 'snappsnet') {
-        await prisma.faucetAccountNonce.updateMany({
+        await prisma.faucetAccountNonce.update({
+          where: {
+            id: 1,
+          },
           data: {
             snappnetNonce: newNonce,
           },
