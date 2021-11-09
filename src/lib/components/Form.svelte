@@ -93,7 +93,7 @@
           type="text"
           id="address"
           name="address"
-          class="shadow-sm focus:ring-orange-mina-primary focus:ring-opacity-60 focus:border-orange-mina-primary block w-full sm:text-sm border-gray-300 rounded-md"
+          class="shadow-sm focus:ring-orange-mina-primary focus:ring-opacity-70 focus:border-opacity-70 focus:border-orange-mina-primary block w-full sm:text-sm border-gray-300 rounded-md"
           placeholder="B62..."
           bind:value={address}
         />

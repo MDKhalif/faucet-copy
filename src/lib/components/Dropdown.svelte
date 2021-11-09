@@ -1,10 +1,10 @@
 <script>
-  import { cubicInOut } from 'svelte/easing';
+  import { scale } from 'svelte/transition';
+  import { cubicIn, cubicOut } from 'svelte/easing';
+
   export let menuOpen;
   export let items;
   export let currentItem;
-
-  const baseDropdownItemStyle = 'hover:bg-gray-200 block px-4 py-2 text-sm';
 
   /**
    * This action is fired when the Dropdown component is mounted. The action initially sets up a
@@ -36,29 +36,6 @@
       },
     };
   }
-
-  function dropdownEaseInAndOut(
-    node,
-    { delay = 0, duration = 200, easing = (x) => x, baseScale = 0 }
-  ) {
-    const o = +getComputedStyle(node).opacity;
-    const m = getComputedStyle(node).transform.match(/scale\(([0-9.]+)\)/);
-    const s = m ? m[1] : 1;
-    const is = 1 - baseScale;
-
-    return {
-      delay,
-      duration,
-      css: (t) => {
-        const eased = easing(t);
-        return `
-          opacity: ${eased * o};
-          transform: scale(${eased * s * is + baseScale})
-          transform-origin: top right;
-        `;
-      },
-    };
-  }
 </script>
 
 <div
@@ -69,7 +46,7 @@
   <div>
     <button
       type="button"
-      class="inline-flex justify-between w-full sm:w-52 rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-orange-mina-primary focus:ring-opacity-60"
+      class="inline-flex justify-between w-full sm:w-52 rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white sm:text-sm font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-mina-primary focus:ring-opacity-70"
       id="menu-button"
       aria-expanded="true"
       aria-haspopup="true"
@@ -93,37 +70,27 @@
 
   {#if menuOpen}
     <div
-      transition:dropdownEaseInAndOut={{
-        delay: 50,
-        duration: 100,
-        easing: cubicInOut,
-        baseScale: 0.5,
-      }}
+      class="origin-top-right absolute right-0 mt-2 w-full sm:w-52 rounded-md sm:text-sm shadow-lg border border-gray-300 bg-white ring-1 ring-orange-mina-primary ring-opacity-5 focus:outline-none cursor-pointer"
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby="menu-button"
+      tabindex="-1"
+      in:scale={{ duration: 100, start: 0.95, easing: cubicOut }}
+      out:scale={{ duration: 75, start: 0.95, easing: cubicIn }}
     >
-      <div
-        class="origin-top-right absolute right-0 mt-2 w-full sm:w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none cursor-pointer"
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="menu-button"
-        tabindex="-1"
-      >
-        <div role="none">
-          {#each items as item}
-            <p
-              class={menuOpen
-                ? `${baseDropdownItemStyle} bg-gray-100 text-gray-900`
-                : `${baseDropdownItemStyle} text-gray-700`}
-              role="menuitem"
-              tabindex="-1"
-              id="menu-item-0"
-              on:click={(e) => {
-                currentItem = e.target.innerText;
-              }}
-            >
-              {item}
-            </p>
-          {/each}
-        </div>
+      <div class="py-1" role="none">
+        {#each items as item}
+          <div
+            class="block px-4 py-2 hover:bg-gray-200 sm:text-sm"
+            role="menuitem"
+            tabindex="-1"
+            on:click={(e) => {
+              currentItem = e.target.innerText;
+            }}
+          >
+            {item}
+          </div>
+        {/each}
       </div>
     </div>
   {/if}
