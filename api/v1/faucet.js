@@ -152,6 +152,7 @@ export default async function handler(req, res) {
           },
         });
       }
+      return res.status(400).json({ status: 'nonce-error' });
     }
     return res.status(400).json({ status: 'broadcast-error' });
   }

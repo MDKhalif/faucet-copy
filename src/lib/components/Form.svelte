@@ -31,6 +31,8 @@
         return 'This account was sent funds previously. Please use another Mina account.';
       case 'broadcast-error':
         return 'Unknown error broadcasting to the network.';
+      case 'nonce-error':
+        return 'Unknown error broadcasting to the network. Please try again in ~3 min.';
       case 'mina-explorer':
         return 'Unknown error. Please try again.';
     }
