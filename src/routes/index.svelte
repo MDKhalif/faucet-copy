@@ -13,7 +13,7 @@
     </h2>
   </div>
   <div
-    class="mt-28 max-w-xl mx-auto text-center text-xl xl:text-2xl text-gray-500"
+    class="mt-24 mb-16 max-w-xl mx-auto text-center text-xl sm:text-2xl text-gray-500"
   >
     <span>Enter a Mina address to receive testnet funds.</span>
     <br />
