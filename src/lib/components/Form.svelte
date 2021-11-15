@@ -12,6 +12,7 @@
   let networkMenuOpen = false;
   let address = 'B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69e'; // TODO: Remove this later, used for testing purposes (this is the Faucet public key)
   let status = 'idle';
+  let paymentID = '';
   $: message = showMessageFromStatus(status);
 
   let validNetworkNames = networkSettings.validNetworks.map(({ name }) => name);
@@ -61,6 +62,7 @@
       });
       const faucetResponseJSON = await faucetResponse.json();
       status = faucetResponseJSON.status;
+      paymentID = faucetResponseJSON.message.paymentID;
     },
   });
 
@@ -111,7 +113,7 @@
     </form>
     <div class="flex justify-center items-center mt-4">
       {#if status === 'success'}
-        <SuccessToast {message} />
+        <SuccessToast {message} {paymentID} />
       {:else if status === 'loading'}
         <Spinner />
       {:else if status !== 'idle' && status !== 'loading'}

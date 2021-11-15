@@ -121,8 +121,12 @@ export default async function handler(req, res) {
         },
       });
     } finally {
+      const paymentResponseJSON = await paymentResponse.json();
       return res.status(200).json({
         status: 'success',
+        message: {
+          paymentID: paymentResponseJSON.result.payment.hash,
+        },
       });
     }
   } else {

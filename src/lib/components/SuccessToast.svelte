@@ -1,6 +1,7 @@
 <script>
   import { fade } from 'svelte/transition';
   export let message;
+  export let paymentID;
 </script>
 
 <div
@@ -26,6 +27,13 @@
     </div>
     <div class="ml-3">
       <p class="text-sm font-medium text-green-800">{message}</p>
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+        href={`https://devnet.minaexplorer.com/transaction/${paymentID}`}
+        class="text-sm font-medium text-green-800 underline"
+        >See your pending transaction on https://devnet.minaexplorer.com</a
+      >
     </div>
   </div>
 </div>
