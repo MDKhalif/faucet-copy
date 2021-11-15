@@ -62,7 +62,9 @@
       });
       const faucetResponseJSON = await faucetResponse.json();
       status = faucetResponseJSON.status;
-      paymentID = faucetResponseJSON.message.paymentID;
+      paymentID = faucetResponseJSON?.message?.paymentID
+        ? faucetResponseJSON.message.paymentID
+        : '';
     },
   });
 
