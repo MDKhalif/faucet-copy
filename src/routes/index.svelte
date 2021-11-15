@@ -5,17 +5,22 @@
 
 <div class="relative">
   <div class="flex flex-col items-center justify-center">
-    <img src={MinaLogo} alt="Mina Logo" class="w-80 h-full" />
+    <img src={MinaLogo} alt="Mina Logo" class="w-80 xl:w-96 h-full" />
     <h2
-      class="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl mt-20"
+      class="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl mt-10"
     >
       Mina Testnet Faucet
     </h2>
   </div>
-  <p class="mt-20 max-w-xl mx-auto text-center text-xl text-gray-500">
-    Enter a Mina address to receive Testnet funds. Testnet tokens have no value,
-    but are useful for experimenting on Mina Testnets.
-  </p>
+  <div
+    class="mt-28 max-w-xl mx-auto text-center text-xl xl:text-2xl text-gray-500"
+  >
+    <div>Enter a Mina address to receive testnet funds.</div>
+    <div class="mt-8">
+      Testnet tokens have no value, but are useful for experimenting on Mina
+      testnets.
+    </div>
+  </div>
   <Form />
   <p class="prose prose-indigo prose-lg text-gray-500 mx-auto text-center">
     <i
