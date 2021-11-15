@@ -4,11 +4,7 @@
   export let paymentID;
 </script>
 
-<div
-  in:fade={{ delay: 250 }}
-  out:fade={{ delay: 250 }}
-  class="rounded-md bg-green-50 p-4"
->
+<div in:fade={{ delay: 250 }} out:fade={{ delay: 250 }} class="bg-green-50 p-4">
   <div class="flex">
     <div class="flex-shrink-0">
       <svg

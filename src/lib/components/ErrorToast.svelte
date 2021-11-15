@@ -10,11 +10,7 @@
   }, 4000);
 </script>
 
-<div
-  in:fade={{ delay: 250 }}
-  out:fade={{ delay: 250 }}
-  class="rounded-md bg-red-50 p-4"
->
+<div in:fade={{ delay: 250 }} out:fade={{ delay: 250 }} class="bg-red-50 p-4">
   <div class="flex">
     <div class="flex-shrink-0">
       <svg

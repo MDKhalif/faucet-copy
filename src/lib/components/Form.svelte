@@ -67,7 +67,7 @@
   });
 
   const baseButtonStyles =
-    'w-full mt-12 inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-orange-mina-primary hover:bg-orange-mina-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-mina-primary focus:ring-opacity-60 sm:ml-3 sm:w-auto sm:text-sm';
+    'w-full mt-12 inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium text-white bg-orange-mina-primary hover:bg-orange-mina-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-mina-primary focus:ring-opacity-60 sm:ml-3 sm:w-auto sm:text-sm';
 </script>
 
 <div class="bg-white flex justify-center items-center mt-10">
@@ -97,7 +97,7 @@
           type="text"
           id="address"
           name="address"
-          class="shadow-sm focus:ring-orange-mina-primary focus:ring-opacity-70 focus:border-opacity-70 focus:border-orange-mina-primary block w-full sm:text-sm border-gray-300 rounded-md"
+          class="shadow-sm focus:ring-orange-mina-primary focus:ring-opacity-70 focus:border-opacity-70 focus:border-orange-mina-primary block w-full sm:text-sm border-gray-300"
           placeholder="B62..."
           bind:value={address}
         />
