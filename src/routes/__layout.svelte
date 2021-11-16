@@ -3,7 +3,7 @@
 </script>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-64 sm:mb-6">
-  <div class="max-w-3xl mx-auto">
+  <div class="max-w-7xl mx-auto">
     <slot />
   </div>
 </div>

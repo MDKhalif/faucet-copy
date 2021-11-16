@@ -1,7 +1,10 @@
 <script>
   import { createForm } from 'felte';
 
+  import CursorLogo from '/static/images/cursor-input.svg';
+
   import Dropdown from '$lib/components/Dropdown.svelte';
+  import Button from '$lib/components/Button.svelte';
   import SuccessToast from '$lib/components/SuccessToast.svelte';
   import ErrorToast from '$lib/components/ErrorToast.svelte';
   import Spinner from '$lib/components/Spinner.svelte';
@@ -67,9 +70,6 @@
         : '';
     },
   });
-
-  const baseButtonStyles =
-    'w-full mt-12 inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium text-white bg-orange-mina-primary hover:bg-orange-mina-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-mina-primary focus:ring-opacity-60 sm:ml-3 sm:w-auto sm:text-sm';
 </script>
 
 <div class="bg-white flex justify-center items-center mt-10">
@@ -79,7 +79,7 @@
       on:submit|preventDefault
       class="sm:flex sm:items-center flex-col"
     >
-      <div class="flex justify-center items-center">
+      <div class="flex justify-center items-center w-full">
         <div class="flex flex-col w-full">
           <span class="block text-gray-700 text-sm font-bold mb-2">
             Network</span
@@ -91,27 +91,32 @@
           />
         </div>
       </div>
-      <div class="w-full sm:max-w-lg mt-6 ">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="address">
+      <div class="w-full sm:max-w-3xl mt-6">
+        <label
+          class="block text-gray-700 tracking-wide_medium text-xs mb-2 uppercase"
+          for="address"
+        >
           Mina Address</label
         >
-        <input
-          type="text"
-          id="address"
-          name="address"
-          class="shadow-sm focus:ring-orange-mina-primary focus:ring-opacity-70 focus:border-opacity-70 focus:border-orange-mina-primary block w-full sm:text-sm border-gray-300 rounded-md"
-          placeholder="B62..."
-          bind:value={address}
-        />
+        <div class="flex items-center justify-between">
+          <div class="relative flex items-stretch flex-grow focus-within:z-10">
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <img src={CursorLogo} alt="Cursor Logo" />
+            </div>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              class="w-full pl-5 drop-shadow-xl text-base focus:ring-orange-mina-primary focus:ring-opacity-70 focus:border-opacity-70 focus:border-orange-mina-primary block rounded-sm border-indigo-500"
+              placeholder="B62..."
+              bind:value={address}
+            />
+          </div>
+          <Button {status} type={'submit'} copy={'Request Funds'} />
+        </div>
       </div>
-      <button
-        type="submit"
-        class={status === 'loading'
-          ? `opacity-25 ${baseButtonStyles}`
-          : baseButtonStyles}
-      >
-        Request Funds
-      </button>
     </form>
     <div class="flex justify-center items-center mt-4">
       {#if status === 'success'}

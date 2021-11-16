@@ -2,3 +2,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .translate-z-n1 {
+    transform: translateZ(-10px);
+  }
+  .button-border-transition-transform {
+    transition-property: transform, border;
+    transition-duration: 200ms;
+    transition-delay: 0ms;
+    transition-timing-function: ease-in;
+  }
+}

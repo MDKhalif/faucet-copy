@@ -1,6 +1,6 @@
 const config = {
-  //mode: 'jit',
-  purge: false,
+  mode: 'jit',
+  purge: ['./src/**/*.html', './src/**/*.svelte'],
 
   theme: {
     extend: {
@@ -14,6 +14,12 @@ const config = {
         'orange-mina-medium': '#D15623',
         'orange-mina-light': '#EC9553',
       },
+      letterSpacing: {
+        wide_medium: '0.03em',
+      },
+    },
+    zIndex: {
+      '-1': -1,
     },
   },
 
