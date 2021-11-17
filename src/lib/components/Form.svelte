@@ -105,7 +105,7 @@
             type="text"
             id="address"
             name="address"
-            class={`w-full max-w-2xl shadow-lg pl-5 text-base focus:ring-border-focused-mina
+            class={`w-full max-w-2xl shadow-lg pl-5 text-base focus:ring-border-focused-mina overflow-ellipsis
             focus:ring-opacity-70 focus:border-opacity-70 focus:border-focused-mina block rounded-sm
              ${
                isError
