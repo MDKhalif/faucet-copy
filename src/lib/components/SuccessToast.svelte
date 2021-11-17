@@ -26,13 +26,13 @@
     </div>
     <div class="ml-3 text-sm font-medium text-green-800">
       <p>{message}</p>
-      <span>See your transaction on </span>
+      <span>View your transaction on </span>
       <a
         rel="noopener noreferrer"
         target="_blank"
         href={`https://devnet.minaexplorer.com/transaction/${paymentID}`}
         class="underline"
-        >{`devnet.minaexplorer.com/transaction/${paymentID}`}</a
+        >{`https://devnet.minaexplorer.com/transaction/${paymentID}`}</a
       >
     </div>
   </div>
