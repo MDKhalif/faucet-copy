@@ -19,10 +19,10 @@
   <div
     class="mt-8 mb-8 max-w-3xl text-left text-lg leading-8 text-black-mina-primary font-mono"
   >
-    Enter a Mina address to receive testnet MINA (tMINA). These have no value,
-    monetary or otherwise, and are solely useful for experimenting on testnets.
-    tMINA cannot be sold and is not redeemable for any cryptocurrency or digital
-    asset.
+    Enter a Mina address to receive testnet MINA (tMINA). <br />These have no
+    value, monetary or otherwise, and are solely useful for experimenting on
+    testnets. tMINA cannot be sold and is not redeemable for any cryptocurrency
+    or digital asset.
   </div>
   <Form />
 </div>
