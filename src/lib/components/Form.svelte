@@ -3,7 +3,7 @@
 
   import CursorLogo from '/static/images/cursor-input.svg';
 
-  import Dropdown from '$lib/components/Dropdown.svelte';
+  import NetworkToggle from '$lib/components/NetworkToggle.svelte';
   import Button from '$lib/components/Button.svelte';
   import SuccessToast from '$lib/components/SuccessToast.svelte';
   import ErrorToast from '$lib/components/ErrorToast.svelte';
@@ -72,53 +72,59 @@
   });
 </script>
 
-<div class="bg-white flex justify-center items-center mt-10">
-  <div class="px-4 py-5 sm:p-6 w-full">
+<div class="bg-white flex justify-center items-center mt-8">
+  <div class="w-full mr-auto">
     <form
       use:form
       on:submit|preventDefault
       class="sm:flex sm:items-center flex-col"
     >
-      <div class="flex justify-center items-center w-full">
-        <div class="flex flex-col w-full">
-          <span class="block text-gray-700 text-sm font-bold mb-2">
+      <div class="flex justify-start items-center w-full mr-auto">
+        <div class="flex flex-col ">
+          <span
+            class="block text-gray-700 tracking-wide_medium text-xs mb-2 uppercase"
+          >
             Network</span
           >
-          <Dropdown
-            bind:menuOpen={networkMenuOpen}
-            bind:currentItem={currentSelectedNetwork}
-            bind:items={validNetworkNames}
-          />
+          <NetworkToggle />
         </div>
       </div>
-      <div class="w-full sm:max-w-3xl mt-6">
+      <div class="flex flex-col w-full max-w-2xl mt-6 mr-auto">
         <label
           class="block text-gray-700 tracking-wide_medium text-xs mb-2 uppercase"
           for="address"
         >
           Mina Address</label
         >
-        <div class="flex items-center justify-between">
-          <div class="relative flex items-stretch flex-grow focus-within:z-10">
-            <div
-              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-            >
-              <img src={CursorLogo} alt="Cursor Logo" />
-            </div>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              class="w-full pl-5 drop-shadow-xl text-base focus:ring-orange-mina-primary focus:ring-opacity-70 focus:border-opacity-70 focus:border-orange-mina-primary block rounded-sm border-indigo-500"
-              placeholder="B62..."
-              bind:value={address}
-            />
+        <div
+          class="relative w-full flex items-stretch flex-grow focus-within:z-10"
+        >
+          <div
+            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
+          >
+            <img src={CursorLogo} alt="Cursor Logo" />
           </div>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            class="w-full shadow-lg pl-7 text-base focus:ring-orange-mina-primary focus:ring-opacity-70 focus:border-opacity-70 focus:border-orange-mina-primary block rounded-sm border-indigo-500"
+            placeholder="B62..."
+            bind:value={address}
+          />
+        </div>
+        <div class="flex flex-col sm:flex-row mt-6">
           <Button {status} type={'submit'} copy={'Request Funds'} />
+          <p
+            class="text-sm w-full sm:w-1/2 prose prose-indigo prose-lg text-black-mina-primary mx-auto text-left mt-6 sm:mt-0 sm:ml-6"
+          >
+            Limit of 1 use per address on each network to ensure everyone has
+            access to funds.
+          </p>
         </div>
       </div>
     </form>
-    <div class="flex justify-center items-center mt-4">
+    <div class="flex justify-start items-center mt-4">
       {#if status === 'success'}
         <SuccessToast {message} {paymentID} />
       {:else if status === 'loading'}
