@@ -27,6 +27,8 @@
 		${bgColorStyles} ${borderStyles} ${darkStyles} ${afterStyles}`;
 </script>
 
+<link rel="preload" as="image" href="/static/images/button-hover-light.png" />
+<link rel="preload" as="image" href="/static/images/button-hover-dark.png" />
 <button
   on:click={onClick ? onClick : () => {}}
   type={type ? type : ''}
