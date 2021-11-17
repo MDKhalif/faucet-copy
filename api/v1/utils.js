@@ -37,9 +37,10 @@ export const checkIfMinaAddressIsValid = (address) => {
 export const constructSignedMinaPayment = (
   faucetKeypair,
   nonce,
-  _toAddress
+  _toAddress,
+  networkAmount
 ) => {
-  const amount = 10 ** 9; // 1.0 mina -- in nanonmina (1 billion = 1.0 mina)
+  const amount = networkAmount ** 9; // 1in nanonmina (1 billion = 1.0 mina)
   const fee = 1 * 10 ** 7; // 0.01 mina -- in nanonmina (1 billion = 1.0 mina)
   const from = faucetKeypair.publicKey;
   const to = faucetKeypair.publicKey; // _toAddress

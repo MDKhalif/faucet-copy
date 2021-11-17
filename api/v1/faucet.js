@@ -95,7 +95,8 @@ export default async function handler(req, res) {
   const signedPayment = constructSignedMinaPayment(
     faucetKeypair,
     currentNetworkNonce,
-    address
+    address,
+    specifiedNetwork.amount
   );
 
   console.log('signedPayment', signedPayment);

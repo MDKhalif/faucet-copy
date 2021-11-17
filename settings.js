@@ -2,13 +2,15 @@ export default {
   validNetworks: [
     {
       ID: 'devnet',
-      name: 'Devnet Testnet',
+      name: 'Devnet',
       endpoint: 'https://devnet.api.minaexplorer.com',
+      amount: 1,
     },
     // {
     //   ID: 'snappsnet',
-    //   name: 'Snapps Testnet',
+    //   name: 'Snappnet',
     //   endpoint: 'https://devnet.api.minaexplorer.com',
+    //   amount: 50,
     // },
   ],
 };
