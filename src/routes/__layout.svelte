@@ -3,9 +3,9 @@
 </script>
 
 <div
-  class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 h-screen1.5 sm:h-screen sm:mb-6"
+  class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 h-screen1.5 sm:h-screen sm:mb-6"
 >
-  <div class="max-w-7xl mx-auto">
+  <div class="max-w-5xl mx-auto">
     <slot />
   </div>
 </div>
