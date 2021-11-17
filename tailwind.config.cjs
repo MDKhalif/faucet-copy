@@ -28,6 +28,10 @@ const config = {
     zIndex: {
       '-1': -1,
     },
+    backgroundImage: {
+      'dark-button': "url('/static/images/button-hover-dark.png')",
+      'light-button': "url('static/images/button-hover-light.png')",
+    },
   },
 
   plugins: [require('@tailwindcss/forms')],

@@ -117,7 +117,7 @@
           />
         </div>
         <div class="flex flex-col sm:flex-row mt-6">
-          <Button {status} type={'submit'} copy={'Request'} />
+          <Button {status} type={'submit'} copy={'Request'} isDarkBg={false} />
           <div
             class="text-sm w-full sm:w-5/13 prose prose-indigo prose-lg text-black-mina-primary mx-auto text-left mt-6 sm:mt-0 sm:ml-6"
           >
