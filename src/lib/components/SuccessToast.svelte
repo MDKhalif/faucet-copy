@@ -4,7 +4,10 @@
   export let paymentID;
 </script>
 
-<div in:fade={{ delay: 250 }} out:fade={{ delay: 250 }} class="bg-green-50 p-4">
+<div
+  in:fade={{ delay: 250 }}
+  class="bg-green-50 p-4 w-full max-w-2xl break-all"
+>
   <div class="flex">
     <div class="flex-shrink-0">
       <svg
@@ -21,14 +24,15 @@
         />
       </svg>
     </div>
-    <div class="ml-3">
-      <p class="text-sm font-medium text-green-800">{message}</p>
+    <div class="ml-3 text-sm font-medium text-green-800">
+      <p>{message}</p>
+      <span>See your transaction on </span>
       <a
         rel="noopener noreferrer"
         target="_blank"
         href={`https://devnet.minaexplorer.com/transaction/${paymentID}`}
-        class="text-sm font-medium text-green-800 underline"
-        >See your pending transaction on https://devnet.minaexplorer.com</a
+        class="underline"
+        >{`devnet.minaexplorer.com/transaction/${paymentID}`}</a
       >
     </div>
   </div>

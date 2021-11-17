@@ -1,8 +1,6 @@
 # Mina Faucet
 
-Currently WIP.
-
-A faucet for Mina. Allows users to request funds for a specified Mina account and network.
+A faucet for Mina testnets. Allows users to request tMina for a specified Mina account and network.
 
 ## Developing
 
