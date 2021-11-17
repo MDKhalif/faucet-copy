@@ -16,10 +16,19 @@ const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
-  const { address, network } = req.body;
+  let address = '';
+  let network = '';
 
   // If we cannot parse the JSON, return 400
+  try {
+    address = req.body.address;
+    network = req.body.network;
+  } catch {
+    console.log(`parse-error -- network:{ ${network} } address:{ ${address} }`);
+    return res.status(400).json({ status: 'parse-error' });
+  }
   if (!address || !network) {
+    console.log(`parse-error -- network:{ ${network} } address:{ ${address} }`);
     return res.status(400).json({ status: 'parse-error' });
   }
 
@@ -29,6 +38,7 @@ export default async function handler(req, res) {
     networkSettings.validNetworks
   );
   if (!specifiedNetwork) {
+    console.log(`invalid-network -- specifiedNetwork:{ ${specifiedNetwork} }`);
     return res.status(400).json({ status: 'invalid-network' });
   }
 
@@ -38,6 +48,7 @@ export default async function handler(req, res) {
       throw 'invalid-address';
     }
   } catch (error) {
+    console.log(`invalid-address -- error:{ ${String(error)} }`);
     return res.status(400).json({ status: 'invalid-address' });
   }
 
@@ -49,6 +60,7 @@ export default async function handler(req, res) {
   //   },
   // });
   // if (previousEntry) {
+  //   console.log(`rate-limit -- previousEntry:{ ${previousEntry} }`);
   //   return res.status(400).json({ status: 'rate-limit' });
   // }
 
@@ -99,8 +111,6 @@ export default async function handler(req, res) {
     specifiedNetwork.amount
   );
 
-  console.log('signedPayment', signedPayment);
-
   // Broadcast transaction
   const paymentResponse = await fetch(
     `${specifiedNetwork.endpoint}/broadcast/transaction`,
@@ -124,10 +134,16 @@ export default async function handler(req, res) {
       });
     } finally {
       const paymentResponseJSON = await paymentResponse.json();
+      const paymentID = paymentResponseJSON.result.payment.hash;
+      console.log(
+        `success -- signedPayment:{ ${JSON.stringify(
+          signedPayment
+        )} } paymentID:{ ${paymentID} }`
+      );
       return res.status(200).json({
         status: 'success',
         message: {
-          paymentID: paymentResponseJSON.result.payment.hash,
+          paymentID,
         },
       });
     }
@@ -158,8 +174,14 @@ export default async function handler(req, res) {
           },
         });
       }
+      console.log(
+        `nonce-error -- currentNetworkNonce:{ ${currentNetworkNonce} } newNonce:{ ${newNonce} }`
+      );
       return res.status(400).json({ status: 'nonce-error' });
     }
+    console.log(
+      `broadcast-error -- paymentResponseJSON:{ ${paymentResponseJSON} }`
+    );
     return res.status(400).json({ status: 'broadcast-error' });
   }
 }
