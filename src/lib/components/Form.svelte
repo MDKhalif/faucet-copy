@@ -10,7 +10,7 @@
 
   import networkSettings from '../../../settings.js';
 
-  let address = 'B62qmQsEHcsPUs5xdtHKjEmWqqhUPRSF2GNmdguqnNvpEZpKftPC69e'; // TODO: Remove this later, used for testing purposes (this is the Faucet public key)
+  let address = '';
   let status = 'idle';
   let paymentID = '';
   $: message = showMessageFromStatus(status);
@@ -23,7 +23,7 @@
   const showMessageFromStatus = (status) => {
     switch (status) {
       case 'success':
-        return 'Success. tMina will arrive at your address when the next block is produced (~3 min).';
+        return 'Success. Testnet Mina will arrive at your address when the next block is produced (~3 min).';
       case 'invalid-address':
         return 'Invalid Mina address. Please verify that your address is correct.';
       case 'invalid-network':
@@ -31,12 +31,12 @@
       case 'parse-error':
         return 'Could not parse the request. Please try again.';
       case 'rate-limit':
-        return 'This account was sent tMina previously. Please use another Mina account.';
+        return 'Maximum allowed withdrawls exceeded.';
       case 'broadcast-error':
         return 'Unknown error broadcasting to the network.';
       case 'nonce-error':
-        return 'Unknown error broadcasting to the network. Please try again in ~3 min.';
-      case 'mina-explorer':
+        return 'Invalid nonce on transaction. Please try again in ~3 min.';
+      default:
         return 'Unknown error. Please try again.';
     }
   };
@@ -81,7 +81,7 @@
       <div class="flex justify-start items-center w-full mr-auto">
         <div class="flex flex-col ">
           <span
-            class="block text-gray-700 tracking-wide_medium text-xs mb-2 uppercase"
+            class="block tracking-wide_medium text-xs mb-2 uppercase font-mono text-mina-black-primary"
           >
             Network</span
           >
@@ -93,7 +93,7 @@
       </div>
       <div class="flex flex-col w-full max-w-2xl mt-6 mr-auto">
         <label
-          class="block text-gray-700 tracking-wide_medium text-xs mb-2 uppercase"
+          class="block tracking-wide_medium text-xs mb-2 uppercase font-mono text-mina-black-primary"
           for="address"
         >
           Mina Address</label
@@ -105,14 +105,14 @@
             type="text"
             id="address"
             name="address"
-            class={`w-full max-w-2xl shadow-lg pl-5 text-base focus:ring-border-focused-mina overflow-ellipsis
-            focus:ring-opacity-70 focus:border-opacity-70 focus:border-focused-mina block rounded-sm
+            class={`w-full max-w-2xl shadow-md pl-5 text-base focus:ring-border-focused-mina overflow-ellipsis
+            focus:ring-opacity-70 focus:border-opacity-70 focus:border-focused-mina block rounded-sm placeholder-gray-mina-primary
              ${
                isError
                  ? 'border-error-mina text-error-mina'
                  : 'border-gray-mina-primary text-current'
              }`}
-            placeholder="Enter Mina Address"
+            placeholder="B62..."
             bind:value={address}
           />
         </div>
