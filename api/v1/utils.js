@@ -27,23 +27,22 @@ export const checkIfMinaAddressIsValid = (address) => {
 /**
  * Constructs a signed payment with a keypair using defaulted values for the amount and fee.
  *
- *  TODO: Replace to, amount and fee values for what will be used in production
- *
  * @param {{publicKey: string, privateKey: string}} faucetKeypair - A Mina keypair
  * @param {Number} nonce A nonce value to be used in the payment
  * @param {string} toAddress A Mina address
+ * @param {string} networkAmount The amount of MINA specified
  * @returns A signed Mina payment
  */
 export const constructSignedMinaPayment = (
   faucetKeypair,
   nonce,
-  _toAddress,
+  toAddress,
   networkAmount
 ) => {
-  const amount = networkAmount ** 9; // 1in nanonmina (1 billion = 1.0 mina)
+  const amount = parseInt(networkAmount.padEnd(10, '0'));
   const fee = 1 * 10 ** 7; // 0.01 mina -- in nanonmina (1 billion = 1.0 mina)
   const from = faucetKeypair.publicKey;
-  const to = faucetKeypair.publicKey; // _toAddress
+  const to = toAddress;
   return MinaSDK.signPayment(
     {
       from,
