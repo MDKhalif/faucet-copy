@@ -13,7 +13,8 @@
 <style>
   @font-face {
     font-family: MonumentGroteskRegular;
-    src: url(/fonts/MonumentGrotesk-Regular.woff) format('woff');
+    src: url('/fonts/MonumentGrotesk-Regular.woff2') format('woff2'),
+      url('/fonts/MonumentGrotesk-Regular.woff') format('woff');
   }
   @font-face {
     font-family: MonumentGroteskMono;
