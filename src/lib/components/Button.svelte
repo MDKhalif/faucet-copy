@@ -21,24 +21,20 @@
 
   const baseButtonStyles = `relative w-full sm:w-auto uppercase flex items-center justify-around px-5 py-3
     shadow-sm font-medium text-xs tracking-widest focus:outline-none text-white
-		${bgColorStyles} ${borderStyles} ${darkStyles}`;
+		${bgColorStyles} ${borderStyles} ${darkStyles} ${afterStyles}`;
 </script>
 
 <svelte:head>
   <link rel="preload" as="image" href="images/button-hover-light.png" />
 </svelte:head>
 
-<div
-  class={`flex items-center justify-center w-auto cursor-pointer ${afterStyles}`}
+<button
+  on:click={onClick ? onClick : () => {}}
+  type={type ? type : ''}
+  class={status === 'loading'
+    ? `opacity-25 ${baseButtonStyles} after:border-0 cursor-wait`
+    : baseButtonStyles}
 >
-  <button
-    on:click={onClick ? onClick : () => {}}
-    type={type ? type : ''}
-    class={status === 'loading'
-      ? `opacity-25 ${baseButtonStyles} after:border-0 cursor-wait`
-      : baseButtonStyles}
-  >
-    <span class="whitespace-nowrap text-center">{copy}</span>
-    <img src={ArrowRightSmall} class="ml-1" alt="Small Right Arrow" />
-  </button>
-</div>
+  <span class="whitespace-nowrap text-center">{copy}</span>
+  <img src={ArrowRightSmall} class="ml-1" alt="Small Right Arrow" />
+</button>
