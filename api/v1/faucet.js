@@ -130,7 +130,7 @@ export default async function handler(req, res) {
         data: {
           address: signedPayment.payload.to,
           network: specifiedNetwork.ID,
-          amount: parseInt(signedPayment.payload.amount),
+          amount: parseInt(specifiedNetwork.amount),
         },
       });
     } finally {
