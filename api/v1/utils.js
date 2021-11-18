@@ -39,7 +39,7 @@ export const constructSignedMinaPayment = (
   toAddress,
   networkAmount
 ) => {
-  const amount = parseInt(networkAmount.padEnd(10, '0'));
+  const amount = parseInt(`${networkAmount}000000000`); // add 9 zeros -- in nanomina (1 billion = 1.0 mina)
   const fee = 1 * 10 ** 7; // 0.01 mina -- in nanonmina (1 billion = 1.0 mina)
   const from = faucetKeypair.publicKey;
   const to = toAddress;
