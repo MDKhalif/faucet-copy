@@ -17,9 +17,9 @@
     ? 'hover:bg-dark-button'
     : 'hover:bg-light-button';
 
-  const afterStyles = `after:absolute after:border after:border-black-mina-primary after:top-1 after:left:1 after:-bottom-1 after:-right-1 after:w-full after:translate-z-n1
+  const afterStyles = `after:absolute after:border after:border-black-mina-primary after:top-1 after:left:1 after:-bottom-1 after:-right-1 after:w-full
     after:rounded-tl-sm after:rounded-tr-sm after:rounded-br-md after:rounded-bl-sm
-    transform-style-preserve-3d hover:after:border-0 hover:after:-translate-x-1 hover:after:-translate-y-1
+    after:translate-z-n1 transform-style-preserve-3d hover:after:border-0 hover:after:-translate-x-1 hover:after:-translate-y-1
     after:button-border-transition-transform`;
 
   const baseButtonStyles = `relative w-full sm:w-auto uppercase flex items-center justify-around px-5 py-3
