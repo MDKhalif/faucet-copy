@@ -53,16 +53,15 @@ export default async function handler(req, res) {
   }
 
   // Apply rate limiting to previous Mina accounts if found in DB
-  // TODO: This is commented out for testing, re add when deploying to production
-  // const previousEntry = await prisma.entry.findUnique({
-  //   where: {
-  //     addressNetwork: { address, network },
-  //   },
-  // });
-  // if (previousEntry) {
-  //   console.log(`rate-limit -- previousEntry:{ ${previousEntry} }`);
-  //   return res.status(400).json({ status: 'rate-limit' });
-  // }
+  const previousEntry = await prisma.entry.findUnique({
+    where: {
+      addressNetwork: { address, network },
+    },
+  });
+  if (previousEntry) {
+    console.log(`rate-limit -- previousEntry:{ ${previousEntry} }`);
+    return res.status(400).json({ status: 'rate-limit' });
+  }
 
   // Construct a keypair object to sign a payment
   const faucetKeypair = {
