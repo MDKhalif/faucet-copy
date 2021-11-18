@@ -6,16 +6,13 @@
   export let copy;
   export let bgColor;
   export let onClick;
-  export let isDarkBg;
 
   const bgColorStyles = bgColor ? bgColor : 'bg-orange-mina-primary';
 
   const borderStyles =
     'border border-black-mina-primary rounded-tl-sm rounded-br-sm';
 
-  const darkStyles = isDarkBg
-    ? 'hover:bg-dark-button'
-    : 'hover:bg-light-button';
+  const darkStyles = 'hover:bg-light-button';
 
   const afterStyles = `after:absolute after:border after:border-black-mina-primary after:top-1 after:left:1 after:-bottom-1 after:-right-1 after:w-full
     after:rounded-tl-sm after:rounded-tr-sm after:rounded-br-md after:rounded-bl-sm
@@ -29,7 +26,6 @@
 
 <svelte:head>
   <link rel="preload" as="image" href="images/button-hover-light.png" />
-  <link rel="preload" as="image" href="images/button-hover-dark.png" />
 </svelte:head>
 
 <div
