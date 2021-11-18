@@ -28,6 +28,8 @@
         return 'Invalid Mina address. Please verify that your address is correct.';
       case 'invalid-network':
         return 'Invalid Network. Please verify that the network you selected is correct.';
+      case 'insufficient-data':
+        return 'Could not read the request. Please try again.';
       case 'parse-error':
         return 'Could not parse the request. Please try again.';
       case 'rate-limit':

@@ -24,12 +24,14 @@ export default async function handler(req, res) {
     address = req.body.address;
     network = req.body.network;
   } catch {
-    console.log(`parse-error -- network:{ ${network} } address:{ ${address} }`);
+    console.log(`parse-error -- req.body:{ ${req.body} }`);
     return res.status(400).json({ status: 'parse-error' });
   }
   if (!address || !network) {
-    console.log(`parse-error -- network:{ ${network} } address:{ ${address} }`);
-    return res.status(400).json({ status: 'parse-error' });
+    console.log(
+      `insufficient-data -- network:{ ${network} } address:{ ${address} }`
+    );
+    return res.status(400).json({ status: 'insufficient-data' });
   }
 
   // If the specified network is invalid, return 400
