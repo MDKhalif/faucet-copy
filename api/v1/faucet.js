@@ -15,7 +15,22 @@ import pkg from '@prisma/client';
 const { PrismaClient } = pkg;
 const prisma = new PrismaClient();
 
-export default async function handler(req, res) {
+const allowCors = (fn) => async (req, res) => {
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', 'faucet.minaprotocol.com');
+  res.setHeader('Access-Control-Allow-Methods', 'POST');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+  return await fn(req, res);
+};
+
+export default allowCors(async function handler(req, res) {
   let address = '';
   let network = '';
 
@@ -185,4 +200,4 @@ export default async function handler(req, res) {
     );
     return res.status(400).json({ status: 'broadcast-error' });
   }
-}
+});
