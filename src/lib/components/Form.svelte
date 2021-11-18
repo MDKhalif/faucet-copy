@@ -116,10 +116,10 @@
             bind:value={address}
           />
         </div>
-        <div class="flex flex-col sm:flex-row mt-6">
+        <div class="flex flex-col sm:flex-row mt-6 w-40 sm:w-full">
           <Button {status} type={'submit'} copy={'Request'} isDarkBg={false} />
           <div
-            class="text-sm w-full sm:w-5/13 prose prose-indigo prose-lg text-black-mina-primary mx-auto text-left mt-6 sm:mt-0 sm:ml-6"
+            class="text-sm w-full sm:w-72 prose prose-indigo prose-lg text-black-mina-primary text-left mt-6 sm:mt-0 sm:ml-6"
           >
             Limit of 1 use per address on each network to help ensure everyone
             has access.

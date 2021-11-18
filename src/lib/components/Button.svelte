@@ -22,7 +22,7 @@
     transform-style-preserve-3d hover:after:border-0 hover:after:-translate-x-1 hover:after:-translate-y-1
     after:button-border-transition-transform`;
 
-  const baseButtonStyles = `relative w-40 sm:w-auto uppercase flex items-center justify-around px-5 py-3
+  const baseButtonStyles = `relative w-full sm:w-auto uppercase flex items-center justify-around px-5 py-3
     shadow-sm font-medium text-xs tracking-widest focus:outline-none text-white
 		${bgColorStyles} ${borderStyles} ${darkStyles} ${afterStyles}`;
 </script>
