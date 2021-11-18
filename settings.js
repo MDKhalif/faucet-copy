@@ -4,7 +4,7 @@ export default {
       ID: 'devnet',
       name: 'Devnet',
       endpoint: 'https://devnet.api.minaexplorer.com',
-      amount: '1',
+      amount: '50',
     },
     // {
     //   ID: 'snappsnet',
