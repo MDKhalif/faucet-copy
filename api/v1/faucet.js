@@ -151,7 +151,9 @@ export default async function handler(req, res) {
   } else {
     const paymentResponseJSON = await paymentResponse.json();
     console.log(
-      `broadcast-error -- paymentResponseJSON:{ ${paymentResponseJSON} }`
+      `broadcast-error -- paymentResponseJSON:{ ${JSON.stringify(
+        paymentResponseJSON
+      )} }`
     );
     const newNonce = getInferredNonceFromErrorResponse(
       paymentResponseJSON.error
