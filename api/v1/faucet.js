@@ -150,6 +150,9 @@ export default async function handler(req, res) {
     }
   } else {
     const paymentResponseJSON = await paymentResponse.json();
+    console.log(
+      `broadcast-error -- paymentResponseJSON:{ ${paymentResponseJSON} }`
+    );
     const newNonce = getInferredNonceFromErrorResponse(
       paymentResponseJSON.error
     );
@@ -180,9 +183,6 @@ export default async function handler(req, res) {
       );
       return res.status(400).json({ status: 'nonce-error' });
     }
-    console.log(
-      `broadcast-error -- paymentResponseJSON:{ ${paymentResponseJSON} }`
-    );
     return res.status(400).json({ status: 'broadcast-error' });
   }
 }
