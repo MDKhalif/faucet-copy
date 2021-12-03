@@ -63,6 +63,7 @@ export const constructSignedMinaPayment = (
  * @returns {number | undefined} A nonce value or undefined
  */
 export const getInferredNonceFromErrorResponse = (errorResponse) => {
+  if (!errorResponse) return null;
   const nonceRegex = /inferred\snonce\s(\d+)/im;
   const nonceMatch = errorResponse.match(nonceRegex);
   return nonceMatch.length > 0 ? parseInt(nonceMatch[1]) : null;
